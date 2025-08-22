@@ -1,0 +1,13 @@
+﻿# Django
+*.sqlite3
+*.pyc
+__pycache__/
+staticfiles/
+.env
+.DS_Store
+
+# Python
+*.egg-info/
+dist/
+build/
+.python-version
