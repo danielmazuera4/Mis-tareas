@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mis Tareas{% endblock %}
+
+{% block content %}
+<div class="task-container">
+    <h4>Lista de tareas</h4>
+
+    <!-- Formulario para añadir tarea -->
+    <form method="post" action="{% url 'add_task' %}" class="task-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Nueva tarea:</label>
+            <input type="text" name="title" id="title" required class="form-input">
+            <button type="submit" class="submit-btn">Agregar</button>
+        </div>
+    </form>
+
+    <hr class="divider">
+
+    <!-- Mostrar las tareas -->
+    <ul class="task-list">
+        {% for task in tasks %}
+        <li class="task-item {% if task.done %}completed{% endif %}">
+            <span class="task-text">
+                {% if task.done %}
+                <s>{{ task.title }}</s>
+                {% else %}
+                {{ task.title }}
+                {% endif %}
+            </span>
+
+            <div class="task-actions">
+                <!-- Botón para marcar como hecha/no hecha -->
+                <a href="{% url 'toggle_task' task.pk %}" class="toggle-btn">
+                    {% if task.done %}Marcar como pendiente{% else %}Marcar como hecha{% endif %}
+                </a>
+
+                <!-- Botón para eliminar -->
+                <a href="{% url 'delete_task' task.pk %}" class="delete-btn">Eliminar</a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="no-tasks">No tienes tareas todavía.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
