@@ -2,12 +2,11 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Seguridad
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-temp-key")
-DEBUG = os.environ.get("DEBUG", "True") == "True"  # True para desarrollo local
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 # Aplicaciones instaladas
@@ -18,7 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "app",  # tu aplicación principal
+    "app",
 ]
 
 # Middleware
@@ -35,7 +34,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "config.urls"
 
-# Templates
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -55,7 +53,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Base de datos
 if DEBUG:
-    # Desarrollo local: SQLite
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -63,7 +60,6 @@ if DEBUG:
         }
     }
 else:
-    # Producción: PostgreSQL Render
     DATABASES = {
         "default": dj_database_url.config(
             default="postgresql://mis_tareas_db_user:XKtQyoPq1WniDNnH4jfzPhXE7iKGIDuA@dpg-d2kjimn5r7bs73cm45h0-a.oregon-postgres.render.com/mis_tareas_db",
@@ -90,4 +86,20 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = "whitenoise.storage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Seguridad adicional
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# Login/Logout
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "task_list"
+LOGOUT_REDIRECT_URL = "login"
+
+# CSRF confiables
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
