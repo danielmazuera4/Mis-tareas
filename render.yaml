@@ -5,7 +5,5 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python manage.py migrate --noinput
+      python manage.py collectstatic --noinput
     startCommand: gunicorn config.wsgi:application
-    envVars:
-      - key: DATABASE_URL
-        value: postgres://mis_tareas_db_user:XKtQyoPq1WniDNnH4jfzPhXE7iKGIDuA@dpg-d2kjimn5r7bs73cm45h0-a.oregon-postgres.render.com/mis_tareas_db
