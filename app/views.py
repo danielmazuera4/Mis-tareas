@@ -24,7 +24,8 @@ def login_view(request):
             return redirect("task_list")
     else:
         form = AuthenticationForm()
-    return render(request, "login.html", {"form": form})
+    return render(request, "registration/login.html", {"form": form})
+
 
 def logout_view(request):
     logout(request)
