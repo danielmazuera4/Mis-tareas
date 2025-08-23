@@ -55,6 +55,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Base de datos
 if DEBUG:
+    # Desarrollo local: SQLite
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -62,9 +63,10 @@ if DEBUG:
         }
     }
 else:
+    # Producción: PostgreSQL Render
     DATABASES = {
         "default": dj_database_url.config(
-            default=os.environ.get("DATABASE_URL"),
+            default="postgresql://mis_tareas_db_user:XKtQyoPq1WniDNnH4jfzPhXE7iKGIDuA@dpg-d2kjimn5r7bs73cm45h0-a.oregon-postgres.render.com/mis_tareas_db",
             conn_max_age=600,
             ssl_require=True
         )
@@ -88,21 +90,4 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# Seguridad adicional para producción
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-# Configuración de login/logout
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "task_list"
-LOGOUT_REDIRECT_URL = "login"
-
-# CSRF confiables
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
-
-# Clave primaria por defecto
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+STATICFILES_STORAGE = "whitenoise.storage"
